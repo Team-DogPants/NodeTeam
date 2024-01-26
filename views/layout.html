@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>{{title}}</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <header>
+    <div class="main-tt">
+      <h1>DogPants</h1>
+      <ul>
+        <li><a href="/about">About</a></li>
+      </ul>
+    </div>
+  </header>
+  <div class="container">
+    {% block content %}
+    {% endblock %}
+    <div class="profile-wrap">
+      <div class="profile">
+        {% if user and user.id %}
+        <div class="user-name">{{'안녕하세요! ' + user.nick + '님'}}</div>
+        <div class="half">
+          <div>팔로잉</div>
+          <div class="count following-count">{{followingCount}}</div>
+        </div>
+        <div class="half">
+          <div>팔로워</div>
+          <div class="count follower-count">{{followerCount}}</div>
+        </div>
+        <input id="my-id" type="hidden" value="{{user.id}}">
+        <a id="my-profile" href="/profile" class="btn">내 프로필</a>
+        <a id="logout" href="/auth/logout" class="btn">로그아웃</a>
+        {% else %}
+        <form id="login-form" action="/auth/login" method="post">
+          <div class="input-group">
+            <label for="email">이메일</label>
+            <input id="email" type="email" name="email" required autofocus>
+          </div>
+          <div class="input-group">
+            <label for="password">비밀번호</label>
+            <input id="password" type="password" name="password" required>
+          </div>
+          <div class="nl">
+            <a id="join" href="/join" class="btn">회원가입</a>
+            <button id="login" type="submit" class="btn">로그인</button>
+          </div>
+          <div class="sl">
+            <h4>────── 또 는 ──────</h4>
+            <a id="kakao" href="/auth/kakao" class="btn">카카오 로그인</a>
+            <a id="naver" href="/auth/naver" class="btn">네이버 로그인</a>
+            <a id="google" href="/auth/google" class="btn">구글 로그인</a>
+          </div>
+        </form>
+        {% endif %}
+      </div>
+      <div class="header">
+        <form id="hashtag-form" action="/hashtag">
+          <input type="text" name="hashtag" placeholder="태그 검색">
+          <button class="btn">검색</button>
+        </form>
+      </div>
+      <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+      <script>
+        window.onload = () => {
+          if (new URL(location.href).searchParams.get('error')) {
+            alert(new URL(location.href).searchParams.get('error'));
+          }
+        };
+      </script>
+      {% block script %}
+      {% endblock %}
+</body>
+
+</html>
